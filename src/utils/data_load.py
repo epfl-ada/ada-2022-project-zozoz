@@ -19,7 +19,7 @@ COL_CMU_CHAR_METADATA = ["wikipedia_movie_id", "freebase_movie_id",
                          "actor_age_at_release_date", "freebase_map_id", "freebase_character_id",
                          "freebase_actor_id"]
 COL_CMU_MOVIE_METADATA = ["wikipedia_movie_id", "freebase_id",
-                          "name", "release_date", "revenue",
+                          "movie_name", "release_date", "revenue",
                           "runtime", "languages", "countries", "genres"]
 COL_CMU_NAME_CLUSTERS = ["name", "char_map_freebase"]
 COL_CMU_PLOT_SUMMARIES = ["wikipedia_movie_id", "plot_summary"]
