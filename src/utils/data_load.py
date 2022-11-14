@@ -58,19 +58,19 @@ DTYPES_IMDB_TITLE_PRINCIPALS = [pd.StringDtype(), pd.Int64Dtype(
 DTYPES_IMDB_RATE = [pd.StringDtype(), float, pd.Int64Dtype()]
 
 
-# CMU Jeremy 
+# CMU Jeremy
 
-COL_NAMES_RAW_CMU_MOVIE = ["wikipedia_id","freebase_id",
-                                     "name","release_date","revenue",
-                                     "runtime","languages","countries","genres"]
-COL_NAMES_RAW_CMU_PLOT = ["wikipedia_id","plot"]
+COL_NAMES_RAW_CMU_MOVIE = ["wikipedia_id", "freebase_id",
+                           "name", "release_date", "revenue",
+                           "runtime", "languages", "countries", "genres"]
+COL_NAMES_RAW_CMU_PLOT = ["wikipedia_id", "plot"]
 INDEX_COL_NAME_RAW_CMU_MOVIE = "wikipedia_id"
 
-COL_NAMES_RAW_CMU_CHARACTER = ["wikipedia_movie_id","freebase_movie_id",
-                                     "release_date","character_name","actor_birth_date",
-                                     "actor_gender","actor_height","actor_ethnicity","actor_name",
-                                     "actor_age_at_release_date","freebase_map_id","freebase_character_id",
-                                     "freebase_actor_id"]
+COL_NAMES_RAW_CMU_CHARACTER = ["wikipedia_movie_id", "freebase_movie_id",
+                               "release_date", "character_name", "actor_birth_date",
+                               "actor_gender", "actor_height", "actor_ethnicity", "actor_name",
+                               "actor_age_at_release_date", "freebase_map_id", "freebase_character_id",
+                               "freebase_actor_id"]
 INDEX_COL_NAME_RAW_CMU_CHARACTER = "freebase_character_id"
 
 FREEBASE_EXTRA_SUFFIX = "language"
@@ -82,46 +82,46 @@ ACTOR_NAME_COL_NAME = "name"
 
 # Helpers for CMU dataset extraction and parsing
 
-def get_raw_movie_dataframe(movie_metadata_path,plot_summary_path):
+def get_raw_movie_dataframe(movie_metadata_path, plot_summary_path):
     """ 
     Create the dataframe containing all the metadata and plots for the movies in the CMU dataset. 
-    
+
     :param movie_metadata_path: Path to the CMU movie metadata dataset.
     :param plot_summary_path: Path to the CMU movie plot dataset.
 
     :return: A pandas Dataframe with merged information from metadata and plots.
     """
-    movie_meta_data = pd.read_csv(movie_metadata_path,sep="\t",
-                                names=COL_NAMES_RAW_CMU_MOVIE,
-                                index_col=INDEX_COL_NAME_RAW_CMU_MOVIE)
-    movie_plots = pd.read_csv(plot_summary_path,sep="\t",
-                                names=COL_NAMES_RAW_CMU_PLOT,
-                                index_col=INDEX_COL_NAME_RAW_CMU_MOVIE)
+    movie_meta_data = pd.read_csv(movie_metadata_path, sep="\t",
+                                  names=COL_NAMES_RAW_CMU_MOVIE,
+                                  index_col=INDEX_COL_NAME_RAW_CMU_MOVIE)
+    movie_plots = pd.read_csv(plot_summary_path, sep="\t",
+                              names=COL_NAMES_RAW_CMU_PLOT,
+                              index_col=INDEX_COL_NAME_RAW_CMU_MOVIE)
     movie_raw_df = movie_meta_data.join(movie_plots)
     return movie_raw_df
-    
-    
+
+
 def get_raw_character_dataframe(character_metadata_path):
     """
     Create the dataframe containing all the metadata for the characters in the CMU dataset.
-    
+
     :param character_metadata_path: Path to the CMU character dataset.
- 
+
     :return: A pandas Dataframe with the metadata for each character in the CMU dataset.
     """
-    character_meta_data = pd.read_csv(character_metadata_path,sep="\t",
-                              names=COL_NAMES_RAW_CMU_CHARACTER,
-                             index_col=INDEX_COL_NAME_RAW_CMU_CHARACTER)
+    character_meta_data = pd.read_csv(character_metadata_path, sep="\t",
+                                      names=COL_NAMES_RAW_CMU_CHARACTER,
+                                      index_col=INDEX_COL_NAME_RAW_CMU_CHARACTER)
     return character_meta_data
+
 
 def freebase_dict_parser_python(entry) -> list:
     """ 
     Parse the entry of the given raw data freebase based entry using built-in python functions. 
-    
+
     :param entry: Raw freebase entry in string format.
 
     :return: A list of the data in the initial entry.
-    
     """
     results = []
     for pair in entry[1:-1].split(","):
@@ -130,95 +130,103 @@ def freebase_dict_parser_python(entry) -> list:
             results.append(single_element.removesuffix(FREEBASE_EXTRA_SUFFIX))
     return results
 
-def apply_entry_level_filter(entry,filter_dict) -> str:
+
+def apply_entry_level_filter(entry, filter_dict) -> str:
     """ 
     Replace in the given entry the different terms in the filter dictionnary. 
-    
+
     :param entry: Single freebase data entry.
     :param filter_dict: Dictionnary with mapping for terms to be replaced.
-    
+
     :return: The newly filtered entry.    
-    """ 
+    """
     new_entry = entry
     for old, new in filter_dict.items():
-        new_entry = new_entry.replace(old,new)
+        new_entry = new_entry.replace(old, new)
     return new_entry
 
-def freebase_dict_parser(entry,filter_dict) -> list:
+
+def freebase_dict_parser(entry, filter_dict) -> list:
     """ 
     Parse the entry of the given raw data freebase based entry using json format. 
-    
+
     :param entry: Non parsed freebase data entry.
     :param filter_dict: Dictionnary with mapping for terms to be replaced.
-    
+
     :return: List containing the parsed information from the raw freebase entry.
     """
     entry_dict = json.loads(entry)
     if len(entry_dict) > 0:
-        return list(set([apply_entry_level_filter(s.lower(),filter_dict)
+        return list(set([apply_entry_level_filter(s.lower(), filter_dict)
                          for s in entry_dict.values()]))
     else:
         return []
-    
-def create_flat_movie_entry_list(entry_name,movie_raw_df,filter_dict) -> list:
+
+
+def create_flat_movie_entry_list(entry_name, movie_raw_df, filter_dict) -> list:
     """ 
     Create a flat list with the movie ids together with the given entry type. 
-    
+
     :param entry_name: Name of the type of entry to be parsed.
     :param movie_raw_df: Dataframe with the raw metadata and plots for the CMU dataset movies.
     :param filter_dict: Dictionnary with mapping for terms to be replaced.
-    
+
     :return: Flat list of tuples with the movie_id and a corresponding data entry.
     """
-    flat_entry_list = [(idx,entry) for idx,entry_list in 
-                      movie_raw_df[entry_name].apply(lambda e : freebase_dict_parser(e,filter_dict)).to_dict().items()
-                      for entry in entry_list]
+    flat_entry_list = [(idx, entry) for idx, entry_list in
+                       movie_raw_df[entry_name].apply(
+                           lambda e: freebase_dict_parser(e, filter_dict)).to_dict().items()
+                       for entry in entry_list]
     return list(set(flat_entry_list))
 
-def create_entry_and_relation_table(movie_raw_df,entry_name,
-                                    entry_id_name,movie_id_name, filter_dict=dict()) -> tuple:
+
+def create_entry_and_relation_table(movie_raw_df, entry_name,
+                                    entry_id_name, movie_id_name, filter_dict=dict()) -> tuple:
     """ 
     Creates the tables for both the given entity and its relation table with the movies. 
-    
+
     :param movie_raw_df: Dataframe with the raw metadata and plots for the CMU dataset movies.
     :param entry_name: Name of the type of entry to be parsed.
     :param entry_id_name: Name of the entry in the raw movie dataframe.
     :param movie_id_name: Name of the wikipedia movie id in the raw movie dataframe.
     :param filter_dict: Dictionnary with mapping for terms to be replaced.
-    
+
     :return: One dataframe containing the different entry values and one dataframe containing the 
              between the movies and these values.
     """
-    entry_relation_df = pd.DataFrame(create_flat_movie_entry_list(entry_name,movie_raw_df,filter_dict)
-                        ,columns=[movie_id_name,entry_id_name])
-    entry_df = pd.DataFrame({entry_id_name:entry_relation_df[entry_id_name].unique()}).set_index([entry_id_name])
-    return entry_df,entry_relation_df
+    entry_relation_df = pd.DataFrame(create_flat_movie_entry_list(
+        entry_name, movie_raw_df, filter_dict), columns=[movie_id_name, entry_id_name])
+    entry_df = pd.DataFrame(
+        {entry_id_name: entry_relation_df[entry_id_name].unique()}).set_index([entry_id_name])
+    return entry_df, entry_relation_df
 
 
 # Helpers for actor duplication handling
 
 def retrieve_duplicated_actors_ids(actor_dataframe) -> list:
     """ 
-        Retrieve the indices of duplicated actors in the given df. 
-        
-        We state that an actor is duplicated if it has the same name
-        and the same birthdate as another entry in the df. Note that
-        we do not consider same years as to be same birth date.
-    
-        :param actor_dataframe: Pandas Dataframe containing actor information.
-        
-        :return: List of tuples of duplicated actors ids.
+    Retrieve the indices of duplicated actors in the given df. 
+
+    We state that an actor is duplicated if it has the same name
+    and the same birthdate as another entry in the df. Note that
+    we do not consider same years as to be same birth date.
+
+    :param actor_dataframe: Pandas Dataframe containing actor information.
+
+    :return: List of tuples of duplicated actors ids.
     """
     duplicated_actors_df = actor_dataframe[
-                            actor_dataframe.duplicated(keep=False)]
+        actor_dataframe.duplicated(keep=False)]
     # We stick to defined actors, the row containing only missing values cannot be
     # Assimilated one to another.
     duplicated_actors_df = duplicated_actors_df[~duplicated_actors_df.isna()]
     duplicated_actors_df = duplicated_actors_df.reset_index()
     duplicated_actors_df = duplicated_actors_df[
-                            ~duplicated_actors_df[ACTOR_BIRTHDATE_COL_NAME].isna()]
-    duplicated_actors_df = duplicated_actors_df.groupby(ACTOR_NAME_COL_NAME,dropna=False)
-    duplicated_actors_dict = duplicated_actors_df[ACTOR_BIRTHDATE_COL_NAME].apply(list).to_dict()
+        ~duplicated_actors_df[ACTOR_BIRTHDATE_COL_NAME].isna()]
+    duplicated_actors_df = duplicated_actors_df.groupby(
+        ACTOR_NAME_COL_NAME, dropna=False)
+    duplicated_actors_dict = duplicated_actors_df[ACTOR_BIRTHDATE_COL_NAME].apply(
+        list).to_dict()
     # Filter actors
     duplicated_actors_ids = []
     for actor_name, birth_dates in duplicated_actors_dict.items():
@@ -228,36 +236,41 @@ def retrieve_duplicated_actors_ids(actor_dataframe) -> list:
         if first_date == second_date and len(first_date) > ACTOR_BIRTHDATE_MIN_LENGTH:
             duplicated_actors_ids.append(
                 actor_dataframe[(actor_dataframe[ACTOR_NAME_COL_NAME] == actor_name)
-                               & (actor_dataframe[ACTOR_BIRTHDATE_COL_NAME] == first_date)
-                               ].index.to_list())
+                                & (actor_dataframe[ACTOR_BIRTHDATE_COL_NAME] == first_date)
+                                ].index.to_list())
     return duplicated_actors_ids
 
-def rematch_duplicated_actor_ids(duplicated_ids,actor_dataframe,relationship_dataframes):
+
+def rematch_duplicated_actor_ids(duplicated_ids, actor_dataframe, relationship_dataframes):
     """ 
     Merge the different duplicated ids in the given dataframes inplace. 
-    
+
     :param duplicated_ids: List of tuples of duplicated actors ids.
     :param actor_dataframe: Pandas Dataframe containing actor information.
     :param relationship_dataframes: List of dataframes where actors are involved.
     """
     for conserved_id, thrown_id in duplicated_ids:
-        actor_dataframe.drop(thrown_id,inplace=True)
+        actor_dataframe.drop(thrown_id, inplace=True)
         for relation_df in relationship_dataframes:
             relation_df["actor_id"] = relation_df["actor_id"].apply(
                 lambda idx: conserved_id if idx == thrown_id else idx)
             relation_df.drop_duplicates(inplace=True)
-        
-def process_duplicated_actors(actor_dataframe,relationship_dataframes):
+
+
+def process_duplicated_actors(actor_dataframe, relationship_dataframes):
     """ 
     Identify duplicated actors entries and merge inplace the different entries together. 
-    
+
     :param actor_dataframe: Pandas Dataframe containing actor information.
     :param relationship_dataframes:List of dataframes where actors are involved.
     """
     duplicated_ids = retrieve_duplicated_actors_ids(actor_dataframe)
-    rematch_duplicated_actor_ids(duplicated_ids,actor_dataframe,relationship_dataframes)
+    rematch_duplicated_actor_ids(
+        duplicated_ids, actor_dataframe, relationship_dataframes)
 
 # Helpers for IMDB integration
+
+
 def dtypes_map(dtypes: list[type], cols: list[str]) -> dict:
     """
     Map the columns of a dataframe to a new dtype.
