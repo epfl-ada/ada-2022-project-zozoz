@@ -4,7 +4,7 @@ node_modules/
 *.egg-info/
 .ipynb_checkpoints
 *.tsbuildinfo
-/.DS_Store
+.DS_Store
 /tmp
 .vscode
 data/imdb/*.tsv.gz

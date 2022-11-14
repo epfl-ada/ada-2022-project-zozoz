@@ -7,8 +7,9 @@ import numpy as np
 
 DATA_PATH = "../data"
 
+# CMU
 FOLDER_CMU = "MovieSummaries"
-FOLDER_IMDB = "imdb"
+
 
 CAT_GENDER = pd.CategoricalDtype(categories=['M', 'F'])
 
@@ -31,6 +32,29 @@ DTYPES_CMU_MOVIE_METADATA = [int, pd.StringDtype(
 DTYPES_CMU_NAME_CLUSTERS = [pd.StringDtype(), pd.StringDtype()]
 DTYPES_CMU_PLOT_SUMMARIES = [int, pd.StringDtype()]
 DTYPES_CMU_TVTROPES_CLUSTERS = [pd.StringDtype(), pd.StringDtype()]
+
+# IMDB
+FOLDER_IMDB = "imdb"
+
+NA_IMDB = ["\\N"]
+
+COL_IMDB_NAME_BASICS = ["nconst", "primary_name", "birth_year",
+                        "death_year", "primary_profession", "known_for_titles"]
+COL_IMDB_TITLE_BASICS = ["tconst", "title_type", "primary_title", "original_title",
+                         "is_adult", "start_year", "end_year", "runtime_minutes", "genres"]
+COL_IMDB_TITLE_CREW = ["tconst", "directors", "writers"]
+COL_IMDB_TITLE_PRINCIPALS = ["tconst", "ordering",
+                             "nconst", "category", "job", "characters"]
+COL_IMDB_RATE = ["tconst", "average_rating", "num_votes"]
+
+DTYPES_IMDB_NAME_BASICS = [pd.StringDtype(), pd.StringDtype(
+), pd.Int64Dtype(), pd.Int64Dtype(), object, object]
+DTYPES_IMDB_TITLE_BASICS = [pd.StringDtype(), pd.StringDtype(), pd.StringDtype(), pd.StringDtype(), pd.Int64Dtype(), pd.Int64Dtype(
+), pd.Int64Dtype(), object, object]
+DTYPES_IMDB_TITLE_CREW = [pd.StringDtype(), object, object]
+DTYPES_IMDB_TITLE_PRINCIPALS = [pd.StringDtype(), pd.Int64Dtype(
+), pd.StringDtype(), pd.StringDtype(), pd.StringDtype(), pd.StringDtype()]
+DTYPES_IMDB_RATE = [pd.StringDtype(), float, pd.Int64Dtype()]
 
 
 def dtypes_map(dtypes: list[type], cols: list[str]) -> dict:
@@ -55,6 +79,17 @@ def parse_dict(x) -> list:
     :return: A list of the values of the dictionary.
     """
     return list(eval(x).values())
+
+
+def parse_imdb_list(x) -> list:
+    """
+    Parse a string to a list.
+
+    :param x: The list contained in the df.
+
+    :return: A list of the values of the list.
+    """
+    return x.split(",")
 
 
 def load_cmu_char_metadata() -> pd.DataFrame:
@@ -139,4 +174,86 @@ def load_cmu_tvtropes_clusters() -> pd.DataFrame:
     df = pd.read_csv(
         f"{DATA_PATH}/{FOLDER_CMU}/tvtropes.clusters.txt", sep="\t", names=COL_CMU_TVTROPES_CLUSTERS, dtype=dtypes)
     df.char_actor_map = df.char_actor_map.apply(eval)
+    return df
+
+
+def load_imdb_name_basics() -> pd.DataFrame:
+    """
+    Load the name basics from the IMDB dataset.
+
+    :return: A dataframe with the name basics.
+    """
+    dtypes = dtypes_map(DTYPES_IMDB_NAME_BASICS, COL_IMDB_NAME_BASICS)
+    df = pd.read_csv(
+        f"{DATA_PATH}/{FOLDER_IMDB}/name.basics.tsv.gz", sep="\t", compression="gzip", skiprows=1, names=COL_IMDB_NAME_BASICS, dtype=dtypes, na_values=NA_IMDB)
+
+    df.primary_profession = df.primary_profession.map(
+        parse_imdb_list, na_action='ignore')
+    df.known_for_titles = df.known_for_titles.map(
+        parse_imdb_list, na_action='ignore')
+    return df
+
+
+def load_imdb_title_basics() -> pd.DataFrame:
+    """
+    Load the title basics from the IMDB dataset.
+
+    :return: A dataframe with the title basics.
+    """
+    dtypes = dtypes_map(DTYPES_IMDB_TITLE_BASICS, COL_IMDB_TITLE_BASICS)
+    df = pd.read_csv(
+        f"{DATA_PATH}/{FOLDER_IMDB}/title.basics.tsv.gz", sep="\t", compression="gzip", skiprows=1, names=COL_IMDB_TITLE_BASICS, dtype=dtypes, na_values=NA_IMDB)
+
+    # remove invalid runtime values
+    invalids = ['Reality-TV', 'Talk-Show', 'Documentary',
+                'Game-Show', 'Animation,Comedy,Family', 'Game-Show,Reality-TV']
+    df.runtime_minutes = df.runtime_minutes.map(
+        lambda r: np.NaN if r in invalids else r).astype(pd.Int64Dtype())
+
+    df.runtime_minutes.fillna(0, inplace=True)
+
+    df.genres = df.genres.map(parse_imdb_list, na_action='ignore')
+    return df
+
+
+def load_imdb_title_crew() -> pd.DataFrame:
+    """
+    Load the title crew from the IMDB dataset.
+
+    :return: A dataframe with the title crew.
+    """
+    dtypes = dtypes_map(DTYPES_IMDB_TITLE_CREW, COL_IMDB_TITLE_CREW)
+    df = pd.read_csv(
+        f"{DATA_PATH}/{FOLDER_IMDB}/title.crew.tsv.gz", sep="\t", compression="gzip", skiprows=1, names=COL_IMDB_TITLE_CREW, dtype=dtypes, na_values=NA_IMDB)
+
+    df.directors = df.directors.map(parse_imdb_list, na_action='ignore')
+    df.writers = df.writers.map(parse_imdb_list, na_action='ignore')
+    return df
+
+
+def load_imdb_title_principals() -> pd.DataFrame:
+    """
+    Load the title principals from the IMDB dataset.
+
+    :return: A dataframe with the title principals.
+    """
+    dtypes = dtypes_map(DTYPES_IMDB_TITLE_PRINCIPALS,
+                        COL_IMDB_TITLE_PRINCIPALS)
+    df = pd.read_csv(
+        f"{DATA_PATH}/{FOLDER_IMDB}/title.principals.tsv.gz", sep="\t", compression="gzip", skiprows=1, names=COL_IMDB_TITLE_PRINCIPALS, dtype=dtypes, na_values=NA_IMDB)
+
+    df.characters = df.characters.map(eval, na_action='ignore')
+    return df
+
+
+def load_imdb_title_ratings() -> pd.DataFrame:
+    """
+    Load the title ratings from the IMDB dataset.
+
+    :return: A dataframe with the title ratings.
+    """
+    dtypes = dtypes_map(DTYPES_IMDB_RATE, COL_IMDB_RATE)
+    df = pd.read_csv(
+        f"{DATA_PATH}/{FOLDER_IMDB}/title.ratings.tsv.gz", sep="\t", compression="gzip", skiprows=1, names=COL_IMDB_RATE, dtype=dtypes, na_values=NA_IMDB)
+
     return df
