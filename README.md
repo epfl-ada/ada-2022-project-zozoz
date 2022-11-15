@@ -1,4 +1,9 @@
-# [Title]
+# Movimentum
+> movimentum (medieval latin) = movement
+
+> cinema = kinema (grec) = movement
+
+> movimentum contains movie and moment (MOVImEntum and MOviMENTum), and personally the word gives me a feeling about time or some historical things...
 
 ## Abstract
 The primary [dataset](http://www.cs.cmu.edu/~ark/personas/) comes from 42,306 movie plot summaries extracted from Wikipedia. Our project aims to analyse and visualize how different ingredients in movies (revenue, genre, runtime, characters or actors) evolve over time...
