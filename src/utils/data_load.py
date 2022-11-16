@@ -5,6 +5,7 @@ Contain the logic for loading data from the data folder.
 import pandas as pd
 import numpy as np
 import json
+from dateutil.parser import parse as dateutil_parse_date
 
 DATA_PATH = "../data"
 
@@ -78,6 +79,15 @@ FREEBASE_EXTRA_SUFFIX = "language"
 ACTOR_BIRTHDATE_MIN_LENGTH = 4
 ACTOR_BIRTHDATE_COL_NAME = "birth_date"
 ACTOR_NAME_COL_NAME = "name"
+
+
+# Wikipedia
+
+WIKIPEDIA_DATE_COLUMNS_NAMES = ["Release dates","Release date","Original release"]
+DEFAULT_DATE = ""
+YEAR_FORMAT = "%Y"
+YEAR_MONTH_FORMAT = "%Y-%m"
+YEAR_MONTH_DAY_FORMAT = "%Y-%m-%d"
 
 
 # Helpers for CMU dataset extraction and parsing
@@ -269,7 +279,99 @@ def process_duplicated_actors(actor_dataframe: pd.DataFrame,
     duplicated_ids = retrieve_duplicated_actors_ids(actor_dataframe)
     rematch_duplicated_actor_ids(
         duplicated_ids, actor_dataframe, relationship_dataframes)
+    
+# Helpers for Wikipedia data loading, parsing and integration
+        
+def clean_date_entry(date_field: list[str]) -> list[str]:
+    """
+    Remove artifacts in a single date field.
+    
+    :param date_field: List of data information for a single movie.
+    
+    :return: A list of cleaned date information for the given movie.
+    
+    """
+    if type(date_field) != list:
+        date_field = [str(date_field)]
+    clean_date = list(set([s.replace("(","").replace(")","") for s in date_field if s != '\xa0(']))
+    return clean_date
 
+def parse_date_columns(wikipedia_dataframe: pd.DataFrame,
+                      date_columns=WIKIPEDIA_DATE_COLUMNS_NAMES):
+    """
+    Parse the wikipedia date information for each date field provided.
+    
+    :param wikipedia_dataframe: Pandas Dataframe containing the wikipedia movie information.
+    :param date_columns: List of columns containing date information to be parsed.
+    
+    """
+    for col in date_columns:
+        wikipedia_dataframe[col] = wikipedia_dataframe[col].apply(lambda d: clean_date_entry(d))
+        wikipedia_dataframe[col] = wikipedia_dataframe[col].apply(lambda d: parse_date(d))
+
+def parse_date(date_field: list[str]) -> str:
+    """ 
+    Parse a single cleaned data entry into standard date format.
+    
+    :param date_field: Cleaned wikipedia date entry.
+    
+    :return: Date parsed or empty string if unable to retrieve the date.
+    
+    """
+    # If entry already in correct format just return it
+    for entry in date_field:
+        if "-" in entry:
+            return entry
+    # If the date field contains a single element, try to parse it directly
+    if len(date_field) == 1:
+        try:
+            date = date_field[0]
+            date_parsed = dateutil_parse_date(date)
+            format_length = len(date.split(" "))
+            if date.split(" ")[-1] == "":
+                format_length = format_length-1
+            if format_length == 1:
+                return date_parsed.strftime(YEAR_FORMAT)
+            elif format_length == 2:
+                return date_parsed.strftime(YEAR_MONTH_FORMAT)
+            elif format_length == 3:
+                return date_parsed.strftime(YEAR_MONTH_DAY_FORMAT)
+            else:
+                return DEFAULT_DATE
+        except:
+            return DEFAULT_DATE
+    # Otherwise try to parse per entry or pair of entry
+    else:
+        # Try to parse an entry in plain text format
+        for entry in date_field:
+            splitted_entry = entry.split(" ")
+            if splitted_entry[-1] == "":
+                splitted_entry = splitted_entry[:-1]
+            if len(splitted_entry) == 3:
+                try:
+                    date_parsed = dateutil_parse_date(entry)
+                    return date_parsed.strftime(YEAR_MONTH_DAY_FORMAT)
+                except:
+                    continue
+        # Try to join two contiguous entry to parse as plain text format
+        for i in range(len(date_field)-1):
+            candidate_date = " ".join(date_field[i]+date_field[i+1])
+            try:
+                date_parsed = dateutil_parse_date(candidate_date)
+                return date_parsed.strftime(YEAR_MONTH_DAY_FORMAT)
+            except:
+                continue
+        # Try to recover only the date 
+        for entry in date_field:
+            if len(entry) == 4:
+                try:
+                    date_parsed = dateutil_parse_date(entry)
+                    return date_parsed.strftime(YEAR_FORMAT)
+                except:
+                    continue
+        return DEFAULT_DATE
+    
+    
 # Helpers for IMDB integration
 
 
