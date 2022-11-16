@@ -82,7 +82,7 @@ ACTOR_NAME_COL_NAME = "name"
 
 # Helpers for CMU dataset extraction and parsing
 
-def get_raw_movie_dataframe(movie_metadata_path, plot_summary_path):
+def get_raw_movie_dataframe(movie_metadata_path: str, plot_summary_path: str):
     """ 
     Create the dataframe containing all the metadata and plots for the movies in the CMU dataset. 
 
@@ -101,7 +101,7 @@ def get_raw_movie_dataframe(movie_metadata_path, plot_summary_path):
     return movie_raw_df
 
 
-def get_raw_character_dataframe(character_metadata_path):
+def get_raw_character_dataframe(character_metadata_path: str):
     """
     Create the dataframe containing all the metadata for the characters in the CMU dataset.
 
@@ -115,7 +115,7 @@ def get_raw_character_dataframe(character_metadata_path):
     return character_meta_data
 
 
-def freebase_dict_parser_python(entry) -> list:
+def freebase_dict_parser_python(entry: str) -> list:
     """ 
     Parse the entry of the given raw data freebase based entry using built-in python functions. 
 
@@ -131,7 +131,7 @@ def freebase_dict_parser_python(entry) -> list:
     return results
 
 
-def apply_entry_level_filter(entry, filter_dict) -> str:
+def apply_entry_level_filter(entry: str, filter_dict: dict) -> str:
     """ 
     Replace in the given entry the different terms in the filter dictionnary. 
 
@@ -146,7 +146,7 @@ def apply_entry_level_filter(entry, filter_dict) -> str:
     return new_entry
 
 
-def freebase_dict_parser(entry, filter_dict) -> list:
+def freebase_dict_parser(entry: str, filter_dict: dict) -> list:
     """ 
     Parse the entry of the given raw data freebase based entry using json format. 
 
@@ -163,7 +163,7 @@ def freebase_dict_parser(entry, filter_dict) -> list:
         return []
 
 
-def create_flat_movie_entry_list(entry_name, movie_raw_df, filter_dict) -> list:
+def create_flat_movie_entry_list(entry_name: str, movie_raw_df: pd.DataFrame, filter_dict: dict) -> list:
     """ 
     Create a flat list with the movie ids together with the given entry type. 
 
@@ -180,8 +180,8 @@ def create_flat_movie_entry_list(entry_name, movie_raw_df, filter_dict) -> list:
     return list(set(flat_entry_list))
 
 
-def create_entry_and_relation_table(movie_raw_df, entry_name,
-                                    entry_id_name, movie_id_name, filter_dict=dict()) -> tuple:
+def create_entry_and_relation_table(movie_raw_df: pd.DataFrame, entry_name: str,
+                                    entry_id_name: str, movie_id_name: str, filter_dict=dict()) -> tuple:
     """ 
     Creates the tables for both the given entity and its relation table with the movies. 
 
@@ -203,7 +203,7 @@ def create_entry_and_relation_table(movie_raw_df, entry_name,
 
 # Helpers for actor duplication handling
 
-def retrieve_duplicated_actors_ids(actor_dataframe) -> list:
+def retrieve_duplicated_actors_ids(actor_dataframe: pd.DataFrame) -> list:
     """ 
     Retrieve the indices of duplicated actors in the given df. 
 
@@ -241,7 +241,8 @@ def retrieve_duplicated_actors_ids(actor_dataframe) -> list:
     return duplicated_actors_ids
 
 
-def rematch_duplicated_actor_ids(duplicated_ids, actor_dataframe, relationship_dataframes):
+def rematch_duplicated_actor_ids(duplicated_ids: list[int], actor_dataframe: pd.DataFrame,
+                                 relationship_dataframes: pd.DataFrame):
     """ 
     Merge the different duplicated ids in the given dataframes inplace. 
 
@@ -257,7 +258,8 @@ def rematch_duplicated_actor_ids(duplicated_ids, actor_dataframe, relationship_d
             relation_df.drop_duplicates(inplace=True)
 
 
-def process_duplicated_actors(actor_dataframe, relationship_dataframes):
+def process_duplicated_actors(actor_dataframe: pd.DataFrame,
+                              relationship_dataframes: pd.DataFrame):
     """ 
     Identify duplicated actors entries and merge inplace the different entries together. 
 
