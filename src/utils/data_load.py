@@ -309,6 +309,20 @@ def parse_date_columns(wikipedia_dataframe: pd.DataFrame,
         wikipedia_dataframe[col] = wikipedia_dataframe[col].apply(lambda d: clean_date_entry(d))
         wikipedia_dataframe[col] = wikipedia_dataframe[col].apply(lambda d: parse_date(d))
 
+def find_appropriate_date_format(date_entry: str, split_char: str):
+    date_parsed = dateutil_parse_date(date_entry)
+    format_length = len(date_entry.split(split_char))
+    if date_entry.split(split_char)[-1] == "":
+        format_length = format_length-1
+    if format_length == 1:
+        return date_parsed.strftime(YEAR_FORMAT)
+    elif format_length == 2:
+        return date_parsed.strftime(YEAR_MONTH_FORMAT)
+    elif format_length == 3:
+        return date_parsed.strftime(YEAR_MONTH_DAY_FORMAT)
+    else:
+        return DEFAULT_DATE
+        
 def parse_date(date_field: list[str]) -> str:
     """ 
     Parse a single cleaned data entry into standard date format.
@@ -320,24 +334,16 @@ def parse_date(date_field: list[str]) -> str:
     """
     # If entry already in correct format just return it
     for entry in date_field:
-        if "-" in entry:
-            return entry
+        if "-" in entry and "," not in entry:
+            try:
+                return find_appropriate_date_format(entry,"-")
+            except:
+                continue
     # If the date field contains a single element, try to parse it directly
     if len(date_field) == 1:
         try:
             date = date_field[0]
-            date_parsed = dateutil_parse_date(date)
-            format_length = len(date.split(" "))
-            if date.split(" ")[-1] == "":
-                format_length = format_length-1
-            if format_length == 1:
-                return date_parsed.strftime(YEAR_FORMAT)
-            elif format_length == 2:
-                return date_parsed.strftime(YEAR_MONTH_FORMAT)
-            elif format_length == 3:
-                return date_parsed.strftime(YEAR_MONTH_DAY_FORMAT)
-            else:
-                return DEFAULT_DATE
+            return find_appropriate_date_format(date," ")
         except:
             return DEFAULT_DATE
     # Otherwise try to parse per entry or pair of entry
