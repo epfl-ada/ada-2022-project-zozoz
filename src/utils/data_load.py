@@ -89,6 +89,10 @@ YEAR_FORMAT = "%Y"
 YEAR_MONTH_FORMAT = "%Y-%m"
 YEAR_MONTH_DAY_FORMAT = "%Y-%m-%d"
 
+# IMDB Jeremy
+
+MOVIE_ID_COL_NAME = "movie_id"
+LAST_DUPLICATES_ID_LIST = [1,2,5,7,9,11,13,15,17,18,21]
 
 # Helpers for CMU dataset extraction and parsing
 
@@ -379,6 +383,37 @@ def parse_date(date_field: list[str]) -> str:
     
     
 # Helpers for IMDB integration
+
+def get_duplicated_movie_ids(movie_dataframe: pd.DataFrame)-> pd.Series:
+    """ 
+    Retrieve the indices of duplicated rows in the given movie dataframe.
+    
+    :param dataframe: Pandas dataframe with a wikipedia movie id column.
+    
+    :return: Series containing boolean, indicator of duplicate.
+    
+    """
+    return movie_dataframe[MOVIE_ID_COL_NAME].duplicated(keep=False)
+
+def update_merged_dataframes(standard_dataframe: pd.DataFrame,
+                             duplicated_dataframe: pd.DataFrame) -> tuple:
+    """
+    Update the two given dataframes by adding non duplicates to the standard one and keeping
+    only duplicates for the duplicated dataframe.
+    
+    :param standard_dataframe: Pandas DataFrame containing the non duplicated entries.
+    :param duplicated_dataframe: Pandas DataFrame containing the duplicated entries.
+    
+    :return: The two updated dataframes.
+    
+    """
+    duplicated_ids = get_duplicated_movie_ids(duplicated_dataframe)
+    standard_dataframe = pd.concat([
+        standard_dataframe,duplicated_dataframe[~duplicated_ids]]).reset_index().drop("index",axis=1)
+    duplicated_dataframe = duplicated_dataframe[duplicated_ids].reset_index().drop("index",axis=1)
+    return standard_dataframe, duplicated_dataframe
+
+# Helpers for IMDB integration (Aamir)
 
 
 def dtypes_map(dtypes: list[type], cols: list[str]) -> dict:
