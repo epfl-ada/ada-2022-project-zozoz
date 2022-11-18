@@ -44,6 +44,8 @@ The CMU movie [dataset](http://www.cs.cmu.edu/~ark/personas/) comes from 42,306 
 ### 1. Data Model 𝌭
 To get a better understanding of our data, we first build a relational model and format data according to it.
 
+![ER - Diagram](/imgs/er.png)
+
 First, we decided to have two tables, `Actor` and `Movie`. Both tables contain the IDs needed to recognize the different movies and actors, as well as other attributes describing the elements. The "appears_in" table makes the link between movies and actors who play in them by also specifying the age of the actors at the time the movie was released. There is also a table for characters in movies, defined by their IDs as well as their names. All movies have characters, all characters belong to a certain movie. All actors play/dub characters, but not all characters are necessarily played by actors (T-Rex in Jurassic Park). It is important to note that we defined our relationships between tables by logic, not by checking the data, as it was before we started working with it.
 
 Finally, there are three more tables providing information about movies, `country`, `is_of_type` and `spoken_languages`. We have separated these tables from the `movie` table since a movie can be linked to several elements in these different tables. We have described the links as complete for all except the link between `movie` and `spoken_language` since movies do not necessarily have a spoken_language (silent movies).
