@@ -1,7 +1,7 @@
 # Is John the reason for the success? A deep dive of the temporal changes in movie
 
 
-## Abstract 📝 [Aamir]
+## Abstract 📝
 The CMU movie [dataset](http://www.cs.cmu.edu/~ark/personas/) comes from around 80k freebase movie entries and 42,306 movie plot summaries extracted from Wikipedia. We want to assess the reasons behind a successful movie and their evolution over time. Success has different dimensions and we are using the box office and IMDB ratings to cover two important ones. The analysis will be performed while taking into account different attributes such as genres, actors, directors, character names and so on. By using regular statistical methods and ML tools, the goal is to provide a robust analysis and come with a framework that allow us to draw meaningful conclusions. We want to see if we can create a blueprint for the next big hit.
 
 ## Structure of the repository
