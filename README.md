@@ -19,16 +19,16 @@ Finally the `/src` folder contains all the code produced for this milestone. It 
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li><a href="#Research Questions">Research Questions</a></li>
-    <li><a href="#Proposed additional datasets">Proposed additional datasets</a></li>
+    <li><a href="#research-questions-">Research Questions</a></li>
+    <li><a href="#proposed-additional-datasets-">Proposed additional datasets</a></li>
     <li><a href="#Run-the-code">Methods</a></li>
       <ol>
-        <li><a href="#data-model">Data Model</a></li>
-        <li><a href="#data-wrangling">Data Wrangling</a></li>
-        <li><a href="#data-analysis">Data Analysis</a></li>
+        <li><a href="#1-data-model-">Data Model</a></li>
+        <li><a href="#2data-wrangling-">Data Wrangling</a></li>
+        <li><a href="#3-data-analysis-">Data Analysis</a></li>
       </ol>
     <li><a href="#proposed-timeline">Proposed Timeline</a></li>
-    <li><a href="#organisation">Organisation within the team</a></li>
+    <li><a href="#organization-within-the-team">Organisation within the team</a></li>
   </ol>
 </details>
 
@@ -48,10 +48,10 @@ The other aspect that we want to cover is linked with the popularity of movies. 
 - Wikipedia
   - Wikipedia is an incredible source of information but the task of retrieval is sometimes cumbersome. In the CMU dataset, we have the wikipedia page ids for all the movies, which allow us to grep data using well established libraries. We used the wikipedia python library to retrieve the page content for many movies with missing release date, as it was our primary goal. The retrieval is not perfect nor complete as the structure of the wikipedia pages for different movie is not consistent and we were not able to retrieve the page for several ids. In practice we were able to get the release date for around 5k movies out of the 8k with missing release date in the CMU dataset.
   Note that we also retrieved many more information (directors, plot summary, etc) from the wikipedia pages but we do not plan to use them as they are more difficult to parse than the IMDB data.
-For the code organisation, you can find the code for the grepping of the data in the ... folder. It produces three different files. Two keep track of the movies for which retrieval was impossible () and ... is the important file containing the wikipedia data for 5k movies.
+For the code organisation, you can find the code for the grepping of the data in this [notebook](/src/utils/Fill_in_with_wikipedia.ipynb). It produces three different files. Two keep track of the movies for which retrieval was impossible ([ids_list](/data/Wikipedia/faulty_no_release_date_movies.pkl),[ids_mapping](/data/Wikipedia/movies_with_missing_wikipedia_data.pkl)) and a final [json dictionnary](/data/Wikipedia/no_release_date_movies.json) is the important file containing the wikipedia data for 5k movies.
 - IMDb
   - To extend our analysis we choose to incorporate a well known movie database to our CMU dataset, IMDb. It allows us to extract popularity of movies based on user rating but also much more information on the actors/actresses, characters and the movie crews. Each movie in IMDB is referenced using a unique page id. Our main task was to find a mapping between our wikipedia id (that we use as main ids in the formated CMU dataset) and the IMDb ids. To do so we first mapped together movies that have the same names. The problem with this method is that many movies share the same name and that some name may be misspelled. To filter out duplicates, i.e. movies that are mapped twice in the CMU dataset, we ensure that two movies must have the same release year. Then for the remaining duplicates we were enforcing that they must share the same runtime. At this point we were left with 22 movies that were still duplicated entries, i.e. one movie in the CMU dataset was assigned to multiple IMDb entries. We drop the duplicates by end as the size of the duplicated set was small. We though initially to filter them by keeping only the movies with the highest number of vote. This was based on the hypothesis that most popular movies would be more likely to appear in the CMU dataset. But after verification, this assumption is not always true in practice. Thus we prefered to keep these filter stages and do the final round by hand.
-The result of this processing is a table in ... which contains the mapping between around 50k wikipedia movie ids and IMDb ids. This allows us to merge tables from our formated CMU dataset and the IMDb dataset. For now we did not proceed to an extensive data analysis of the IMDb dataset, but our primary goal was to be sure that we could indeed use this data together with our original dataset.
+The result of this processing is a [table](/data/generated/wikipedia_imdb_mapping_df.pkl) which contains the mapping between around 50k wikipedia movie ids and IMDb ids. This allows us to merge tables from our formated CMU dataset and the IMDb dataset. For now we did not proceed to an extensive data analysis of the IMDb dataset, but our primary goal was to be sure that we could indeed use this data together with our original dataset.
   
 
 ## Methods 🤖
