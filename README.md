@@ -4,6 +4,16 @@
 ## Abstract 📝 [Aamir]
 The CMU movie [dataset](http://www.cs.cmu.edu/~ark/personas/) comes from around 80k freebase movie entries and 42,306 movie plot summaries extracted from Wikipedia. We want to assess the reasons behind a successful movie and their evolution over time. Success has different dimensions and we are using the box office and IMDB ratings to cover two important ones. The analysis will be performed while taking into account different attributes such as genres, actors, directors, character names and so on. By using regular statistical methods and ML tools, the goal is to provide a robust analysis and come with a framework that allow us to draw meaningful conclusions. We want to see if we can create a blueprint for the next big hit.
 
+## Structure of the repository
+
+We splited our work in several folders for clarity. 
+
+In the `/data` folder you can find several subfolders containing the [original dataset](/data/MovieSummaries), the datasets used for [wikipedia](/data/Wikipedia) and [IMDb](/data/imdb) integration and the [data formated](/data/generated) using our processing pipeline.
+
+The `/imgs` folder contains the graphic displayed in this document.
+
+Finally the `/src` folder contains all the code produced for this milestone. It contains two subfolders. The `/src/utils` folder contains the code with the helpers functions and notebook for data creation. The `/src/eda` folder contains notebooks dedicated to the data analysis. The first [notebook](/src/eda/data_inspection.ipynb) is handling the general data description and analysis. Whereas the second [notebook](/src/eda/initial_time_series_analysis.ipynb) focuses on analysis to support our research questions. Finally the `/src` folder contains a [notebook](/src/create_data.ipynb) that is used to generate our data in correct format (see below for more extensive explanations).
+ 
 ---
 
 <details>
