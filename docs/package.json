@@ -15,5 +15,8 @@
 		"svelte": "^3.53.1",
 		"vite": "^3.2.4"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@sveltejs/adapter-static": "^1.0.0-next.48"
+	}
 }
