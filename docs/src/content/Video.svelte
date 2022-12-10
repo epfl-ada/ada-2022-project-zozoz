@@ -1,4 +1,5 @@
 <script>
+    import { base } from "$app/paths";
     function scrollIntoView({ target }) {
         const el = document.querySelector(target.getAttribute("href"));
         if (!el) return;
@@ -9,7 +10,7 @@
 </script>
 
 <div class="bg-video-wrap">
-    <video src="./movie.mp4" loop muted autoplay />
+    <video src="{base}/movie.mp4" loop muted autoplay />
     <div class="overlay-text">
         <span class="bg-pad h1"> Is John the reason for the success? </span>
         <br />
