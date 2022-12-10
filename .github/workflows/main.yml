@@ -19,22 +19,17 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
-
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-
+        
       - name: Set up node
         uses: actions/setup-node@v3
         with:
           node-version: 18
           
       - name: Install dependencies
-        run: cd docs && pnpm install
+        run: cd docs && npm install
 
       - name: Build site
-        run: cd docs && pnpm build
+        run: cd docs && npm run build
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v1
