@@ -51,9 +51,9 @@ pip-delete-this-directory.txt
 ## For the website
 .DS_Store
 node_modules
-/build
-/.svelte-kit
-/package
+/docs/build
+/docs/.svelte-kit
+/docs/package
 .env
 .env.*
 !.env.example

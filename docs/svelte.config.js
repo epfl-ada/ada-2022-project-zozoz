@@ -10,7 +10,7 @@ const config = {
 		})
 	],
 	kit: {
-		paths: { base: '/ada-2022-project-zozoz' },
+		//paths: { base: '/ada-2022-project-zozoz' },
 		adapter: adapter()
 	}
 };
