@@ -17,6 +17,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@sveltejs/adapter-static": "^1.0.0-next.48"
+		"@sveltejs/adapter-static": "^1.0.0-next.48",
+		"svelte-plotly.js": "^0.3.2"
 	}
 }

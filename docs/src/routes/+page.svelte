@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import Example from "../content/example.md";
     import Video from "../content/Video.svelte";
     import Plot from "svelte-plotly.js";
