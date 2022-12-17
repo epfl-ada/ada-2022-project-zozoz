@@ -1,9 +1,14 @@
 # Global Imports
 import pandas as pd
 import numpy as np
+import pickle
 # Statistics
 import statsmodels.api as sm
 from statsmodels.stats.outliers_influence import variance_inflation_factor
+# Sparse Matrix
+from scipy.sparse import csr_matrix
+from scipy.sparse import save_npz
+from scipy.sparse import load_npz
 
 # Constants
 CONTINENT_ID = {"North America and Australia": [1,0,0,0,0,0],
@@ -531,6 +536,8 @@ GENRE_LIST = ["action","adventure","comedy","drama","thriller","horror",
 #   log: Columns on which to apply a log transform.
 #   standardize: Columns to standardize.
 #   post_drop: Columns to drop before doing the regression.
+#   words: List of words to integrate as part of the regression. If the
+#          list is empty, then the plot will be discarded for regression.
 DEFAULT_PARAMETERS = {
             "drop": ["name","revenue","has_common_character_name","has_common_language","language_number","character_number"],
             "nan_filtering":["all"],
@@ -554,6 +561,27 @@ K_LANGUAGES = 5
 K_CHARACTERS = 20
 
 # Helpers
+
+def add_word_to_regression(regression_dataframe: pd.DataFrame,
+                           plot_dataframe: pd.DataFrame,
+                           word: str, BOW_dict: dict, binarize=True):
+    """
+    Add the occurence of the given term as a feature in the regression dataframe.
+    
+    :param regression_df: Pandas DataFrame containing the data for regression.
+    :param plot_dataframe: Pandas DataFrame with the plot processing data.
+    :param word: Word to integrate in the regression dataframe.
+    :param BOW_dict: Dictionnary containing the mapping between words and ids in the BOW matrix.
+    :param binarize: Indicator if the output should be a single binary variable for the 
+                    occurence of the word in the movie rather than the number of occurences
+    
+    """
+    movie_has_term_series = plot_dataframe["encoding"].apply(
+        lambda bow: bow[BOW_dict[word]] if BOW_dict[word] in bow else 0)
+    if binarize:
+        movie_has_term_series = movie_has_term_series > 0
+        movie_has_term_series = movie_has_term_series.replace({True: 1, False: 0})
+    regression_dataframe[f"plot_has_{word}"] = movie_has_term_series
 
 def director_metrics_up_to_date(movie_dataframe: pd.DataFrame, director_movies: set, date) -> tuple:
     """
@@ -589,19 +617,12 @@ def standardize_column(dataframe: pd.DataFrame, col_name: str):
         dataframe[col_name].mean())/dataframe[col_name].std()
     
 def process_dataframe(dataframe: pd.DataFrame,
-                      parameters={"drop": [], "nan_filtering":["all"],"decades":[],
-                                  "log":[], "standardize":[]}) -> pd.DataFrame:
+                      parameters=DEFAULT_PARAMETERS) -> pd.DataFrame:
     """
     Pre-process the dataframe for regression given the instructions in parameters.
     
     :param dataframe: Pandas DataFrame with the movie data for regression
-    :param parameters: Dictionnary with the different parameters for pre-processing:
-                            - drop: List of columns to drop.
-                            - nan_filtering: List of columns where nan rows should be excluded.
-                            - decades: List of decades to keep. If empty, keep all decades.
-                            - log: List of columns to log transform.
-                            - standardize: List of columns to standardize.
-                    
+    :param parameters: Dictionnary with the different parameters for pre-processing.                    
     
     :return: Processed Pandas DataFrame ready for regression.
     
@@ -762,9 +783,14 @@ def format_regression_df(dataframe: pd.DataFrame, decades: list,
 
 # Pipelines
 
-def get_raw_regression_df() -> pd.DataFrame:
+def get_raw_regression_df(words_to_add: dict) -> pd.DataFrame:
     """
     Create a pandas DataFrame with the basic crafted features for regression.
+
+    :param words_to_add: Dictionnary with as key the words to integrate for regression
+                            as covariates and as values if their occurence should be binarized.
+                            We refer to the 'add_word_to_regression' function for detail about
+                            words occurence integration for regression.
 
     :return: Pandas DataFrame with raw data for regression.
 
@@ -785,10 +811,20 @@ def get_raw_regression_df() -> pd.DataFrame:
     wikipedia_imdb_mapping_table = pd.read_pickle("../../data/generated/wikipedia_imdb_mapping_df.pkl")
     is_directed_by_df = pd.read_pickle("../../data/post_processing/is_directed_by_df.pkl")
     director_df = pd.read_pickle("../../data/post_processing/director_df.pkl")
+    # Load Plot Data
+    plot_data_df = pd.read_pickle("../../data/post_processing/plot_df.pkl")
+    BOW_matrix = load_npz("../../data/post_processing/BOW_matrix.npz")
+    with open("../../data/post_processing/BOW_mapping.pkl", 'rb') as handle:
+        BOW_dict = pickle.load(handle)
+    reversed_BOW_dict = {v:k for k,v in BOW_dict.items()}
     # Create DataFrame
     movie_regression_df = movie_df.copy()
     movie_regression_df.drop(["freebase_id","plot"],axis=1,inplace=True)
     movie_regression_df["num_votes"] = movie_regression_df["num_votes"].astype(np.int32)
+    # Word Occurences
+    for word, word_is_bool in words_to_add.items():
+        add_word_to_regression(movie_regression_df, plot_data_df,
+                               word, BOW_dict, binarize=word_is_bool)
     # Country features
     country_movie_df = comes_from_df.copy()
     country_movie_df["country_encoding"] = country_movie_df["country_name"].apply(
