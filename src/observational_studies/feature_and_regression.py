@@ -796,7 +796,7 @@ def get_raw_regression_df(words_to_add: dict) -> pd.DataFrame:
 
     """
     # Load Data
-    country_df = pd.read_pickle("../../data/post_processing//country_df.pkl")
+    country_df = pd.read_pickle("../../data/post_processing/country_df.pkl")
     comes_from_df = pd.read_pickle("../../data/post_processing/comes_from_df.pkl")
     genre_df = pd.read_pickle("../../data/post_processing/genre_df.pkl")
     is_of_type_df = pd.read_pickle("../../data/post_processing/is_of_type_df.pkl")
