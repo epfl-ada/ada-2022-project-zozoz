@@ -1,29 +1,18 @@
 <script>
-    import Example from "../content/example.md";
+    import Intro from "../content/intro.md";
+    import Why from "../content/why_bad_movies.md";
+    import Footer from "../content/footer.md";
     import Video from "../content/Video.svelte";
-    import Plot from "svelte-plotly.js";
-
-    const data = [
-        {
-            x: [1, 2, 3, 4, 5],
-            y: [1, 2, 4, 8, 16],
-        },
-    ];
+    import SimplePlot from "../content/plots/simple_plot.svelte";
 </script>
 
 <Video />
 
-<div class="max-width-4 mx-auto" id="start">
-    <h1>LOL</h1>
-    <Example />
-    <Plot
-        {data}
-        layout={{
-            margin: { t: 0 },
-        }}
-        fillParent="width"
-        debounce={250}
-    />
+<div class="max-width-3 mx-auto mt3" id="start">
+    <Intro />
+    <Why />
+    <SimplePlot />
+    <Footer />
 </div>
 
 <style>
