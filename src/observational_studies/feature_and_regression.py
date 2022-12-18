@@ -650,7 +650,7 @@ def process_dataframe(dataframe: pd.DataFrame,
 
 def select_next_feature(regression_df: pd.DataFrame, target: pd.Series,
                         current_features=[], ignored_features=[], 
-                        alpha=0.05, show=False) -> str:
+                        alpha=0.05, show=False, log_reg=False) -> str:
     """
     Report the best feature to integrate to the current OLS model based on r-squared.
     
@@ -660,28 +660,35 @@ def select_next_feature(regression_df: pd.DataFrame, target: pd.Series,
     :param ignored_features: List of features that should not be integrated in the regression.
     :param alpha: Significance level, default 0.05.
     :param show: Display the different features scores.
+    :param log_reg: Indicator to perform a logistic regression instead of linear regression.
     
     :result: Name of the best feature or None if no new significant features.
     
     """
-    result_dict = {'predictor': [], 'r-squared':[], "aic":[], "p_value":[]}
+    result_dict = {'predictor': [], "aic":[], "p_value":[]}
+    if not log_reg:
+        result_dict['r-squared'] = []
     for col in regression_df.columns:
         if col not in (current_features+ignored_features):
             X = regression_df[current_features + [col]]
-            model = sm.OLS(target, sm.add_constant(X)).fit()
+            if log_reg:
+                model = sm.Logit(target, sm.add_constant(X)).fit()
+            else:
+                model = sm.OLS(target, sm.add_constant(X)).fit()
             #Add the column name to our dictionary
             result_dict['predictor'].append(col)
-            #Calculate the r-squared value between the target and predicted target
-            r2 = model.rsquared
+            if not log_reg:
+                #Calculate the r-squared value between the target and predicted target
+                r2 = model.rsquared
+                result_dict['r-squared'].append(r2)
             #Add the model metrics to our dictionary
-            result_dict['r-squared'].append(r2)
             result_dict['aic'].append(model.aic)
             result_dict['p_value'].append(model.pvalues.loc[col])
     #Once it's iterated through every column, turn our dict into a sorted DataFrame
-    candidates_features = pd.DataFrame(result_dict).sort_values(by=['r-squared'],
-                                                          ascending = False)
+    candidates_features = pd.DataFrame(result_dict).sort_values(by=['aic'],
+                                                          ascending = True)
     if show:
-        print(candidates_features.head())
+        display(candidates_features.head())
         
     candidates_features = candidates_features[candidates_features["p_value"] < alpha]
     if len(candidates_features) == 0:
@@ -690,7 +697,8 @@ def select_next_feature(regression_df: pd.DataFrame, target: pd.Series,
         return candidates_features["predictor"].iloc[0]
 
 def forward_selection(regression_df: pd.DataFrame, target: pd.Series,
-                        ignored_features=[], alpha=0.05, show=False) -> list:
+                        ignored_features=[], alpha=0.05, show=False,
+                        log_reg=False) -> list:
     """
     Iterative forward feature selection based on r-squared without interaction terms.
     
@@ -700,6 +708,7 @@ def forward_selection(regression_df: pd.DataFrame, target: pd.Series,
     :param ignored_features: List of features that should not be integrated in the regression.
     :param alpha: Significance level, default 0.05.
     :param show: Display the different features scores.
+    :param log_reg: Indicator to perform a logistic regression instead of linear regression.
     
     :result: List of the best features to model the target.
     
@@ -711,7 +720,7 @@ def forward_selection(regression_df: pd.DataFrame, target: pd.Series,
         last_feature = select_next_feature(regression_df, target,
                         current_features=current_features,
                         ignored_features=ignored_features, 
-                        alpha=alpha, show=show)
+                        alpha=alpha, show=show, log_reg=log_reg)
         if last_feature != "None":
             current_features.append(last_feature)
     return current_features
