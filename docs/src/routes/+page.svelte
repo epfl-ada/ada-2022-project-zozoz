@@ -1,9 +1,9 @@
 <script>
-    import Intro from "../content/intro.md";
-    import Why from "../content/why_bad_movies.md";
-    import Footer from "../content/footer.md";
-    import Video from "../content/Video.svelte";
-    import SimplePlot from "../content/plots/simple_plot.svelte";
+    import Intro from "$lib/intro.md";
+    import Why from "$lib/why_bad_movies.md";
+    import Footer from "$lib/footer.md";
+    import Video from "$lib/Video.svelte";
+    import SimplePlot from "$lib/plots/simple_plot.svelte";
 </script>
 
 <Video />
