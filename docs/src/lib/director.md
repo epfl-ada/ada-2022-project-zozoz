@@ -8,5 +8,7 @@ import { base } from "$app/paths";
 
 Lorem Ipsum.
 
+![Rating Distribution]({base}/plots/ratings_distribution.png)
+
 </section>
 
