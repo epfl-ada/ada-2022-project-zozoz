@@ -10,7 +10,13 @@
 </script>
 
 <div class="bg-video-wrap mt2">
-    <video src="{base}/movie.mp4" loop muted autoplay />
+    <video
+        poster="{base}/poster.jpg"
+        src="{base}/movie.mp4"
+        loop
+        muted
+        autoplay
+    />
     <div class="overlay-text">
         <span class="bg-pad h1"> What makes a bad movie bad? </span>
         <br />
@@ -24,7 +30,7 @@
             <a
                 href="#start"
                 class="hover-underline-animation"
-                on:click|preventDefault={scrollIntoView}>👇 Read our story!</a
+                on:click|preventDefault={scrollIntoView}>👇🏽 Read our story!</a
             ></span
         >
     </div>
@@ -56,8 +62,8 @@
     }
     .bg-pad {
         padding: 0.5rem 1rem;
-        color: #fff;
-        background: rgb(0, 0, 0);
+        color: #000;
+        background: #fcbe11;
     }
 
     .overlay-bottom {
@@ -65,23 +71,23 @@
         top: 95%;
         left: 50%;
         transform: translate(-50%, -50%);
-        color: white;
+        color: #000;
         text-align: center;
     }
 
     a {
-        color: #ffffff;
+        color: #000000;
         text-decoration: none;
     }
 
     a:visited {
-        color: #ffffff;
+        color: #000000;
     }
 
     .hover-underline-animation {
         display: inline-block;
         position: relative;
-        color: #ffffff;
+        color: #000000;
     }
 
     .hover-underline-animation::after {
@@ -92,7 +98,7 @@
         height: 2px;
         bottom: 0;
         left: 0;
-        background-color: #ffffff;
+        background-color: #000;
         transform-origin: bottom right;
         transition: transform 0.25s ease-out;
     }

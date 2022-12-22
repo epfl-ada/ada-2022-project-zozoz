@@ -1,7 +1,5 @@
 <script>
-// import Histogram from "$lib/plots/histogram.svelte"
 import { base } from "$app/paths";
-
 </script>
 
 <section class="justify">
@@ -14,7 +12,6 @@ Taste is subjective. So it's subjective what constitutes a "bad" movie, as diffe
 <!-- <Histogram /> -->
 
 The histogram shows that more movies are positively rated. Since our data is just have a partial snapshot of the IMDb ratings and is biased towards positive and more popular movies. To define a cutoff rating we made small survey ($n =$ 10), which resulted in a cutoff rating of 7.5 (picky watchers 🌚).
-
 
 </section>
 

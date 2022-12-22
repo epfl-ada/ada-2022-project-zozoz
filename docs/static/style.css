@@ -1,4 +1,8 @@
 /*! Basscss | http://basscss.com | MIT License */
+p {
+    font-size: 1.1rem;
+}
+
 .h1 {
     font-size: 2rem
 }
@@ -1168,7 +1172,7 @@ body {
 body,
 html {
     background-color: #fff;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', serif;
     color: #000000;
     margin: 0;
     padding: 0;
