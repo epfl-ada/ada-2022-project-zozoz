@@ -9,14 +9,14 @@
     }
 </script>
 
-<div class="bg-video-wrap">
+<div class="bg-video-wrap mt2">
     <video src="{base}/movie.mp4" loop muted autoplay />
     <div class="overlay-text">
-        <span class="bg-pad h1"> Is John the reason for the success? </span>
+        <span class="bg-pad h1"> What makes a bad movie bad? </span>
         <br />
         <br />
-        <span class="h1 bg-pad italic h1 mt4"
-            >A deep dive of the temporal changes in movie</span
+        <span class="h1 bg-pad italic mt4"
+            >A data-driven analysis of Sharknado and co.</span
         >
     </div>
     <div class="overlay-bottom">
@@ -33,14 +33,17 @@
 <style>
     .bg-video-wrap {
         position: relative;
+        padding-bottom: 50%;
+        padding-top: 0px;
+        height: 0;
         overflow: hidden;
-        width: 100%;
-        height: 100vh;
     }
     video {
-        min-width: 100%;
-        min-height: 100vh;
-        z-index: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
     }
 
     .overlay-text {
@@ -52,7 +55,7 @@
         text-align: center;
     }
     .bg-pad {
-        padding: 0.5rem 2rem;
+        padding: 0.5rem 1rem;
         color: #fff;
         background: rgb(0, 0, 0);
     }
