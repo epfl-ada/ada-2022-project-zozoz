@@ -62,7 +62,7 @@ The result of this processing is a [table](/data/generated/wikipedia_imdb_mappin
 ## Methods 🤖
 
 ### 1. Data Model 𝌭 
-To get a better understanding of our data, we first build a relational model and format data according to it.
+To get a better understanding of our data, we first build a relational model and format data according to it. You can find the detailled ER diagram in `/imgs`.
 
 First, we decided to have two tables, `Actor` and `Movie`. Both tables contain the IDs needed to recognize the different movies and actors, as well as other attributes describing the elements. The "appears_in" table makes the link between movies and actors who play in them by also specifying the age of the actors at the time the movie was released. There is also a table for characters in movies, defined by their IDs as well as their names. All movies have characters, all characters belong to a certain movie. All actors play/dub characters, but not all characters are necessarily played by actors (T-Rex in Jurassic Park). It is important to note that we defined our relationships between tables by logic, not by checking the data, as it was before we started working with it.
 
