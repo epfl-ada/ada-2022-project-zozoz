@@ -3,6 +3,7 @@
     import Why from "$lib/why_bad_movies.md";
     import Gender from "$lib/gender.md";
     import Director from "$lib/director.md";
+    import Genre from "$lib/genre.md";
     import Conclusion from "$lib/conclusion.md";
     import Footer from "$lib/footer.md";
     import Video from "$lib/Video.svelte";
@@ -15,6 +16,7 @@
     <Why />
     <Gender />
     <Director />
+    <Genre />
     <Conclusion />
     <Footer />
 </div>

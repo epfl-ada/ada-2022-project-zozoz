@@ -1179,6 +1179,50 @@ html {
 }
 
 img {
-    max-width: 100%;
+    max-width: 75%;
     height: auto;
+    margin: 0 auto;
+    display: block;
+}
+
+button {
+    background-color: #fcbe11;
+    border: none;
+    color: #000;
+    border-radius: 0;
+    font-family: inherit;
+    font-size: .875rem;
+    font-weight: 700;
+    text-decoration: none;
+    height: 2.5em;
+    margin: 0;
+    padding: .5em 1em;
+    border: 0;
+    margin: 0 auto;
+    display: block;
+
+}
+
+.hover-underline-animation {
+
+    position: relative;
+    color: #000000;
+}
+
+.hover-underline-animation::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
 }
