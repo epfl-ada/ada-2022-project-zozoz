@@ -70,6 +70,8 @@ Finally, there are three more tables providing information about movies, `countr
 
 All the dataframes are [here](/data/generated/).
 
+And all the data can be downloaded from [here](https://drive.google.com/drive/folders/1U1z5CKaPnHoRY4j4D4lERDdaoZC0LGzr?usp=sharing).
+
 
 
 ### 2.Data Wrangling 🥋
