@@ -2,7 +2,7 @@
 
 
 ## Abstract 📝
-The CMU movie [dataset](http://www.cs.cmu.edu/~ark/personas/) comes from around 80k freebase movie entries and 42,306 movie plot summaries extracted from Wikipedia. The main question that will drive our analysis is what makes a bad movie bad. Success has different dimensions and we are using the box office and IMDB ratings to cover two important ones. The analysis will be performed while taking into account different attributes such as genres, actors, directors, characters, budget and so on. By using regular statistical methods and ML tools, the goal is to provide a robust analysis and come with a framework that allow us to draw meaningful conclusions. We want to see if we can create a blueprint for the next big hit.
+The CMU movie [dataset](http://www.cs.cmu.edu/~ark/personas/) comes from around 80k freebase movie entries and 42,306 movie plot summaries extracted from Wikipedia. The main question that will drive our analysis is what makes a bad movie bad. Success has different dimensions and we are using the box office and IMDb ratings to cover two important ones. The analysis will be performed while taking into account different attributes such as genres, actors, directors, characters, budget and so on. By using regular statistical methods and ML tools, the goal is to provide a robust analysis and come with a framework that allow us to draw meaningful conclusions. We want to see if we can find factors for the next bad movie.
 
 ## Structure of the repository
 
@@ -39,21 +39,20 @@ We splited our work in several folders for clarity.
 ## Research Questions 🧠
 - What makes a movie bad across the years?
     - What are the key characteristics, for example directors, actors, genres or budget?
-- Can we cluster successful movie plots, and from the clustering extract meaningful reason for the success?
+- Can we cluster bad movie plots, and from the clustering extract meaningful reason for the performance?
 - Are the reasons for success the same across countries and time?
-- Can we create our own blueprint the next big hit?
 - Does the popular culture trends linked to the overall movie success?
 
 ## Proposed additional datasets 📠 
 Even though the CMU dataset is quite complete, we used external ressources in order to fill-in missing information and increase the depth of our analysis. 
 As we are interested in temporal changes, we need to have the release date for the maximum number of movie possible. To do so we will use the Wikipedia website. 
-The other aspect that we want to cover is linked with the popularity of movies. This information and many more can be retrieved using the public [IMDB data](https://www.imdb.com/interfaces/). This datasets allow us also to investigate deeper the place of actors and characters and ask question about the technical crew of movies such as directors, music producer etc.
+The other aspect that we want to cover is linked with the popularity of movies. This information and many more can be retrieved using the public [IMDb data](https://www.imdb.com/interfaces/). This datasets allow us also to investigate deeper the place of actors and characters and ask question about the technical crew of movies such as directors, music producer etc.
 - Wikipedia
   - Wikipedia is an incredible source of information but the task of retrieval is sometimes cumbersome. In the CMU dataset, we have the wikipedia page ids for all the movies, which allow us to grep easily data. We used the wikipedia python library to retrieve the page content for many movies with missing release date. The retrieval is not perfect nor complete as the structure of the wikipedia pages for different movie is not consistent and we were not able to retrieve the page for several ids. In practice we were able to get the release date for around 5k movies out of the 8k with missing release date in the CMU dataset.
-  Note that we also retrieved many more information (directors, plot summary, etc) from the wikipedia pages but we do not plan to use them as they are more difficult to parse than the IMDB data.
+  Note that we also retrieved many more information (directors, plot summary, etc) from the wikipedia pages but we do not plan to use them as they are more difficult to parse than the IMDb data.
 For the code organisation, you can find the code for the grepping of the data in this [notebook](/src/utils/Fill_in_with_wikipedia.ipynb). It produces three different files. Two keep track of the movies for which retrieval was impossible ([ids_list](/data/Wikipedia/faulty_no_release_date_movies.pkl),[ids_mapping](/data/Wikipedia/movies_with_missing_wikipedia_data.pkl)) and a final [json dictionnary](/data/Wikipedia/no_release_date_movies.json) is the important file containing the wikipedia data for 5k movies.
 - IMDb
-  - To extend our analysis we choose to incorporate a well known movie database to our CMU dataset, IMDb. It allows us to extract popularity of movies based on user rating but also much more information on the actors/actresses, characters and the movie crews. Each movie in IMDB is referenced using a unique page id. Our main task was to find a mapping between our wikipedia id (that we use as main ids in the formated CMU dataset) and the IMDb ids. To do so we first mapped together movies that have the same names. The problem with this method is that many movies share the same name and that some name may be misspelled. To filter out duplicates, we use a multi-step pipeline described [here](/src/create_data.ipynb).
+  - To extend our analysis we choose to incorporate a well known movie database to our CMU dataset, IMDb. It allows us to extract popularity of movies based on user rating but also much more information on the actors/actresses, characters and the movie crews. Each movie in IMDb is referenced using a unique page id. Our main task was to find a mapping between our wikipedia id (that we use as main ids in the formated CMU dataset) and the IMDb ids. To do so we first mapped together movies that have the same names. The problem with this method is that many movies share the same name and that some name may be misspelled. To filter out duplicates, we use a multi-step pipeline described [here](/src/create_data.ipynb).
 The result of this processing is a [table](/data/generated/wikipedia_imdb_mapping_df.pkl) which contains the mapping between around 50k wikipedia movie ids and IMDb ids. This allows us to merge tables from our formated CMU dataset and the IMDb dataset. For now we did not proceed to an extensive data analysis of the IMDb dataset, but our primary goal was to be sure that we could indeed use this data together with our original dataset.
   
 
