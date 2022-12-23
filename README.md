@@ -91,3 +91,35 @@ Time series analysis implies several mathematical methods ranging from statistic
 For movie clustering we used K-means, and LDA for the plots.
 Finally, to assess the values of our results in the scope of statistical findings, we used the different tools that are involved in observationnal studies such as matching algorithm (KNN for matching), linear regression and logistic regression (for propensity score computation and classification).
 
+## Organization within the team
+
+<table class="tg" style="undefined;table-layout: fixed; width: 342px">
+<colgroup>
+<col style="width: 164px">
+<col style="width: 178px">
+</colgroup>
+<thead>
+  <tr>
+    <th class="tg-0lax">Member</th>
+    <th class="tg-0lax">Tasks</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax">Aamir</td>
+    <td class="tg-0lax">Develop the web interface<br><br>Develop clustering<br><br>Develop the final text for the data story</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cindy</td>
+    <td class="tg-0lax">Come up with meaningful visualizations<br><br>Continue exploring the dataset<br><br>Develop the final text for the data story</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Jérémy</td>
+    <td class="tg-0lax">Define topic of interests<br><br>Develop clustering<br><br>Develop the final text for the data story</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Shayan</td>
+    <td class="tg-0lax">Develop the web interface<br><br>Working on blueprint<br><br>Develop the final text for the data story</td>
+  </tr>
+</tbody>
+</table>
