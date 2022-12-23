@@ -13,8 +13,8 @@ We splited our work in several folders for clarity.
 - The `/src` folder contains all the code produced for our analysis. First, it contains a [notebook](/src/create_data.ipynb) that is used to generate our data in correct format (see below for more extensive explanations), [another one](/src/data_formatting.ipynb) for the final data pre-processing steps such as data integration, and features parsing and filtering, and the [last one](src/final_plot.ipynb) includes our main figures used for the presentation. Then, the folder is divided into several subfolders:
     - The `/src/utils` folder contains the code with the helpers functions and notebook for data creation. 
     - The `/src/eda` folder is dedicated to the data exploration for milestone 2. The first [notebook](/src/eda/data_inspection.ipynb) is handling the general data description and analysis. Whereas the second [notebook](/src/eda/initial_time_series_analysis.ipynb) focuses on analysis to support our research questions. 
-    - The `/src/features_engineering` folder hold our handcrafted features extracted from our datasets.
-    - Finally, the `/src/observational_studies` folder contains the observational studies such as propensity matching and regression to try to draw causal conclusions on the impact of our features on movie ratings. 
+    - The `/src/features_engineering` folder hold our handcrafted features extracted from our datasets, followed by deep analysis across each feature to investiguate its relationship with movie ratings.
+    - Finally, the `/src/observational_studies` folder contains the observational studies such as propensity matching and regression to try to draw causal conclusions on the impact of our previous features on movie ratings. 
 - The `/docs` folder contains the code to build the website for our [data story](https://epfl-ada.github.io/ada-2022-project-zozoz).
  
 ---
