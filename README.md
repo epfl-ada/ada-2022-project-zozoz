@@ -3,18 +3,18 @@
 Find the amaizing data story [here](https://epfl-ada.github.io/ada-2022-project-zozoz).
 
 ## Abstract 📝
-The CMU movie [dataset](http://www.cs.cmu.edu/~ark/personas/) comes from around 80k freebase movie entries and 42,306 movie plot summaries extracted from Wikipedia. The main question that will drive our analysis is what makes a bad movie bad. Success has different dimensions and we are using the box office and IMDb ratings to cover two important ones. The analysis will be performed while taking into account different attributes such as genres, actors, directors, characters, budget and so on. By using regular statistical methods and ML tools, the goal is to provide a robust analysis and come with a framework that allow us to draw meaningful conclusions. We want to see if we can find factors for the next bad movie.
+The CMU movie [dataset](http://www.cs.cmu.edu/~ark/personas/) comes from around 80k freebase movie entries and 42,306 movie plot summaries extracted from Wikipedia. The main question that will drive our analysis is what makes a bad movie bad. Success has different dimensions and we are using the box office and IMDb ratings to cover two important ones. The analysis will be performed while taking into account different attributes such as genres, actors, directors, budget and so on. By using regular statistical methods and ML tools, the goal is to provide a robust analysis and come with a framework that allow us to draw meaningful conclusions. We want to see if we can find factors for the next bad movie.
 
 ## Structure of the repository
 
 We splited our work in several folders for clarity. 
 
-- In the `/data` folder you can find several subfolders containing the [original dataset](/data/MovieSummaries), the datasets used for [wikipedia](/data/Wikipedia) and [IMDb](/data/imdb) integration and the [data formated](/data/generated) using our processing pipeline.
+- In the `/data` folder you can find several subfolders containing the [original dataset](/data/MovieSummaries), the datasets used for [wikipedia](/data/Wikipedia) and [IMDb](/data/imdb) integration and the [data formated](/data/generated) using our data processing pipeline.
 - The `/imgs` folder contains the graphic displayed in this document.
 - The `/src` folder contains all the code produced for our analysis. First, it contains a [notebook](/src/create_data.ipynb) that is used to generate our data in correct format (see below for more extensive explanations), [another one](/src/data_formatting.ipynb) for the final data pre-processing steps such as data integration, and features parsing and filtering, and the [last one](src/final_plot.ipynb) includes our main figures used for the presentation. Then, the folder is divided into several subfolders:
     - The `/src/utils` folder contains the code with the helpers functions and notebook for data creation. 
     - The `/src/eda` folder is dedicated to the data exploration for milestone 2. The first [notebook](/src/eda/data_inspection.ipynb) is handling the general data description and analysis. Whereas the second [notebook](/src/eda/initial_time_series_analysis.ipynb) focuses on analysis to support our research questions. 
-    - The `/src/features_engineering` folder hold our handcrafted features extracted from our datasets, followed by deep analysis across each feature to investiguate its relationship with movie ratings.
+    - The `/src/features_engineering` folder hold our handcrafted features extracted from our datasets, followed by deep analysis across each feature to investiguate its relationship with movie ratings. You can find a detailed plot analysis that we did not integrate in our final analysis because we were unable to find significant coefficients and were lacking statistical power to draw real conclusions. But it allowed us to have a glimpse of what are the trends of plots in good and bad movies.
     - Finally, the `/src/observational_studies` folder contains the observational studies such as propensity matching and regression to try to draw causal conclusions on the impact of our previous features on movie ratings. 
 - The `/docs` folder contains the code to build the website for our [data story](https://epfl-ada.github.io/ada-2022-project-zozoz).
  
@@ -38,6 +38,7 @@ We splited our work in several folders for clarity.
 
 ---
 ## Research Questions 🧠
+We started our analyis with the following set of research questions:
 - What makes a movie bad across the years?
     - What are the key characteristics, for example directors, actors, genres or budget?
 - Can we cluster bad movie plots, and from the clustering extract meaningful reason for the performance?
@@ -74,58 +75,16 @@ All the dataframes are [here](/data/generated/).
 #### Missing data
 As previously stated, we used Wikipedia data to recover the release date for 5k different movies. The missing data is of important magnitude for the revenue of movies and actors/actresses general informations (height, ethnicity, birthdate). 
 Revenue could be retrieve from Wikipedia, but the parsing is hard and the pipeline cannot guarantee 100% hit due to wrong wikipedia mapping and inconsistent page structure. One of the interest of the revenue would be to use it as a proxy of the movie success but we will use instead the ratings from IMDb users. The study of revenue over time could be interesting but would require comparison dataset to be sure that the findings are note simply due to inflation. Thus we would need extensive data on other industries.
-IMDb can be used to retrieve missing actors/actresses data.
+IMDb could be used in the future to retrieve missing actors/actresses data.
 #### Incorrect data
-As seen in the initial data exploration, we can see that we have some entries with abnormal values, redundancy (e.g. ukrainian, ukranian) and other artifacts in the data. We already began to correct these problems by using for example mappings to converge to common values to avoid redundancy. Clustering could also help to gather data whose differences are likely due to generation/human errors. The use of advanced value imputation using similarity between movies is also considered.
+As seen in the initial data exploration, we can see that we have some entries with abnormal values, redundancy (e.g. ukrainian, ukranian) and other artifacts in the data. We already began to correct these problems by using for example mappings to converge to common values to avoid redundancy. Clustering could also help to gather data whose differences are likely due to generation/human errors. 
 #### Features clustering
-Then, we make extensive cleaning and correction of the data only for movies for which we have an IMDb ids. Our data can be very high dimensional if we consider the total number of languages, countries, actors etc. We have only 44k movies, but we have several hundreds on genres, languages and countries, which gives already around 10 millions possibilities. And this is without even looking at the hundreds of thousands of actors and characters. Thus we have to come up with features that can capture signal in the data, without having to do one-hot encoding for each feature. For this prupose, we cluster countries, genres and languages into main general groups.
+Then, we made extensive cleaning and correction of the data only for movies for which we have an IMDb ids. Our data can be very high dimensional if we consider the total number of languages, countries, actors etc. We have only 44k movies, but we have several hundreds on genres, languages and countries, which gives already around 10 millions possibilities. And this is without even looking at the hundreds of thousands of actors and characters. Thus we have to come up with features that can capture signal in the data, without having to do one-hot encoding for each feature. For this prupose, we cluster countries, genres and languages into main general groups.
 
 ### 3. Data Analysis 📈 
 
-Our main focus of interest is the study of the reasons behind a bad movie. To perfom these analysis we use several tools among which we can find time series analysis, clustering methods and the observational study machinery.
-Time series analysis implies several mathematical methods ranging from statistical tests to regression and ARMA/ARIMA.
-For movie clustering we plan to use standard unsupervised methods such as K-means or BIRCH.
-Finally, to assess the values of our results in the scope of statistical findings, we plan to use the different tools that are involved in observationnal studies such as matching algorithm or logistic regression.
+Our main focus of interest is the study of the reasons behind a bad movie. To perfom these analysis we used several tools among which we can find time series analysis, clustering methods and the observational study machinery.
+Time series analysis implies several mathematical methods ranging from statistical tests to regression.
+For movie clustering we used K-means, and LDA for the plots.
+Finally, to assess the values of our results in the scope of statistical findings, we used the different tools that are involved in observationnal studies such as matching algorithm (KNN for matching), linear regression and logistic regression (for propensity score computation and classification).
 
-## Proposed timeline
-| Period  | Description |
-| ------------- | ------------- |
-| 19.11 - 25.11  | Finish data processing  |
-| 26.11 - 02.12  | Time series analysis, Features engineering  |
-| 03.12 - 09.12  | Features enginering, Plotting graphs for presentation  |
-| 10.11 - 16.12  | Observational studies, Data story |
-| 17.11 - 23.12  | Data story, Website programming  |
-| 23.12  | Project submission  |
-
-## Organization within the team
-
-<table class="tg" style="undefined;table-layout: fixed; width: 342px">
-<colgroup>
-<col style="width: 164px">
-<col style="width: 178px">
-</colgroup>
-<thead>
-  <tr>
-    <th class="tg-0lax">Member</th>
-    <th class="tg-0lax">Tasks</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td class="tg-0lax">Aamir</td>
-    <td class="tg-0lax">Develop the web interface<br><br>Develop clustering<br><br>Develop the final text for the data story</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cindy</td>
-    <td class="tg-0lax">Come up with meaningful visualizations<br><br>Continue exploring the dataset<br><br>Develop the final text for the data story</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Jérémy</td>
-    <td class="tg-0lax">Define topic of interests<br><br>Develop clustering<br><br>Develop the final text for the data story</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Shayan</td>
-    <td class="tg-0lax">Develop the web interface<br><br>Working on blueprint<br><br>Develop the final text for the data story</td>
-  </tr>
-</tbody>
-</table>
