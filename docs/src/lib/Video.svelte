@@ -11,7 +11,7 @@
 
 <div class="bg-video-wrap mt2">
     <video
-        poster="{base}/poster.jpg"
+        poster="{base}/poster.gif"
         src="{base}/movie.mp4"
         loop
         muted

@@ -8,6 +8,8 @@ import { base } from "$app/paths";
 
 Lorem Ipsum.
 
+![Genderratio]({base}/plots/genreratio.png)
+
 
 </section>
 
