@@ -89,10 +89,10 @@ Finally, to assess the values of our results in the scope of statistical finding
 | Period  | Description |
 | ------------- | ------------- |
 | 19.11 - 25.11  | Finish data processing  |
-| 26.11 - 02.12  | Time series analysis  |
-| 03.12 - 09.12  | Time series analysis, plotting graphs for presentation  |
-| 10.11 - 16.12  | Cleaning graphs, data story, website programming  |
-| 17.11 - 23.12  | Final revisions  |
+| 26.11 - 02.12  | Time series analysis, Features engineering  |
+| 03.12 - 09.12  | Features enginering, Plotting graphs for presentation  |
+| 10.11 - 16.12  | Observational studies, Data story |
+| 17.11 - 23.12  | Data story, Website programming  |
 | 23.12  | Project submission  |
 
 ## Organization within the team
