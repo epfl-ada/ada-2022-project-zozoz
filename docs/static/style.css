@@ -1226,3 +1226,11 @@ button {
     transform: scaleX(1);
     transform-origin: bottom left;
 }
+
+a {
+    color: #000000;
+}
+
+a:visited {
+    color: #000000;
+}
