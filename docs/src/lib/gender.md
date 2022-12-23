@@ -4,9 +4,9 @@ import { base } from "$app/paths";
 
 <section class="justify">
 
-## Gender Ratio
+## Gender Balance
 
-The fact that sexism is rooted in the cinema industry is not new. Several concepts, such as the [Bechdel test](https://bechdeltest.com/), have already demonstrated the imbalance in the roles of actresses vs actors. To investigate the role of gender balance in the movie's success, we computed the mean of the number of actresses minus the number of actors: $$E[\#actress - \#actor]$$. Our preliminary analysis has shown a negative correlation between this handcrafted feature and the movie's success. Would movies with more men than women be more successful? 
+The fact that sexism is rooted in the cinema industry is not new. Several concepts, such as the [Bechdel test](https://bechdeltest.com/), have already demonstrated the imbalance in the roles of actresses vs actors. To investigate the role of gender balance in the movie's success, we computed the mean of the number of actresses minus the number of actors: $$\frac{1}{n}E[\#actress - \#actor]$$. Our preliminary analysis has shown a negative correlation between this handcrafted feature and the movie's success. Would movies with more men than women be more successful? 
 
 ![Genderratio]({base}/plots/genreratio.png)
 

@@ -45,7 +45,7 @@
             <a
                 href="#gender"
                 class="hover-underline-animation"
-                on:click|preventDefault={scrollIntoView}>Gender</a
+                on:click|preventDefault={scrollIntoView}>Gender Balance</a
             >
         </li>
         <li>
