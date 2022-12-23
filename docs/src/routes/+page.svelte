@@ -4,6 +4,7 @@
     import Gender from "$lib/gender.md";
     import Director from "$lib/director.md";
     import Genre from "$lib/genre.md";
+    import Budget from "$lib/budget.md";
     import Conclusion from "$lib/conclusion.md";
     import Footer from "$lib/footer.md";
     import Video from "$lib/Video.svelte";
@@ -31,6 +32,13 @@
         </li>
         <li>
             <a
+                href="#genre"
+                class="hover-underline-animation"
+                on:click|preventDefault={scrollIntoView}>Genre</a
+            >
+        </li>
+        <li>
+            <a
                 href="#gender"
                 class="hover-underline-animation"
                 on:click|preventDefault={scrollIntoView}>Gender</a
@@ -45,9 +53,9 @@
         </li>
         <li>
             <a
-                href="#genre"
+                href="#budget"
                 class="hover-underline-animation"
-                on:click|preventDefault={scrollIntoView}>Genre</a
+                on:click|preventDefault={scrollIntoView}>Budget</a
             >
         </li>
         <li>
@@ -76,14 +84,17 @@
 <div class="max-width-3 mx-auto mt3" id="start">
     <Intro />
     <Why />
+    <div id="genre">
+        <Genre />
+    </div>
     <div id="gender">
         <Gender />
     </div>
     <div id="director">
         <Director />
     </div>
-    <div id="genre">
-        <Genre />
+    <div id="budget">
+        <Budget />
     </div>
     <div id="conclusion">
         <Conclusion />

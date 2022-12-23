@@ -4,9 +4,9 @@ import { base } from "$app/paths";
 
 <section class="justify">
 
-## Conclusion
+## Budget
 
-![Rating Distribution]({base}/plots/badmovie.png)
+Lorem Ipsum.
 
 </section>
 
