@@ -1,8 +1,8 @@
-# Is John the reason for the success? A deep dive of the temporal changes in movie
+# What makes a bad movie bad? *A data-driven analysis of Sharknado and co.*
 
 
 ## Abstract 📝
-The CMU movie [dataset](http://www.cs.cmu.edu/~ark/personas/) comes from around 80k freebase movie entries and 42,306 movie plot summaries extracted from Wikipedia. We want to assess the reasons behind a successful movie and their evolution over time. Success has different dimensions and we are using the box office and IMDB ratings to cover two important ones. The analysis will be performed while taking into account different attributes such as genres, actors, directors, character names and so on. By using regular statistical methods and ML tools, the goal is to provide a robust analysis and come with a framework that allow us to draw meaningful conclusions. We want to see if we can create a blueprint for the next big hit.
+The CMU movie [dataset](http://www.cs.cmu.edu/~ark/personas/) comes from around 80k freebase movie entries and 42,306 movie plot summaries extracted from Wikipedia. The main question that will drive our analysis is what do we consider as a good or a bad movie. Success has different dimensions and we are using the box office and IMDB ratings to cover two important ones. The analysis will be performed while taking into account different attributes such as genres, actors, directors, characters, budget and so on. By using regular statistical methods and ML tools, the goal is to provide a robust analysis and come with a framework that allow us to draw meaningful conclusions. We want to see if we can create a blueprint for the next big hit.
 
 ## Structure of the repository
 
@@ -12,7 +12,9 @@ In the `/data` folder you can find several subfolders containing the [original d
 
 The `/imgs` folder contains the graphic displayed in this document.
 
-Finally the `/src` folder contains all the code produced for this milestone. It contains two subfolders. The `/src/utils` folder contains the code with the helpers functions and notebook for data creation. The `/src/eda` folder contains notebooks dedicated to the data analysis. The first [notebook](/src/eda/data_inspection.ipynb) is handling the general data description and analysis. Whereas the second [notebook](/src/eda/initial_time_series_analysis.ipynb) focuses on analysis to support our research questions. Finally the `/src` folder contains a [notebook](/src/create_data.ipynb) that is used to generate our data in correct format (see below for more extensive explanations).
+The `/src` folder contains all the code produced for our analysis. It is divided in several subfolders. The `/src/utils` folder contains the code with the helpers functions and notebook for data creation. The `/src/eda` folder contains notebooks dedicated to the data exploration for milestone 2. The first [notebook](/src/eda/data_inspection.ipynb) is handling the general data description and analysis. Whereas the second [notebook](/src/eda/initial_time_series_analysis.ipynb) focuses on analysis to support our research questions. Finally the `/src` folder also contains a [notebook](/src/create_data.ipynb) that is used to generate our data in correct format (see below for more extensive explanations) and [another one](/src/data_formatting.ipynb) for the final data pre-processing steps such as data integration, and features parsing and filtering.
+
+The `/docs` folder contains the code to build the website for our [data story](https://epfl-ada.github.io/ada-2022-project-zozoz).
  
 ---
 
@@ -34,8 +36,8 @@ Finally the `/src` folder contains all the code produced for this milestone. It 
 
 ---
 ## Research Questions 🧠
-- What makes a movie successful across the years?
-    - What are the key characteristics, for example director, actors, genres or character names?
+- What makes a movie bad across the years?
+    - What are the key characteristics, for example directors, actors, genres or budget?
 - Can we cluster successful movie plots, and from the clustering extract meaningful reason for the success?
 - Are the reasons for success the same across countries and time?
 - Can we create our own blueprint the next big hit?
