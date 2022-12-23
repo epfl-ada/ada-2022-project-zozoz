@@ -17,6 +17,8 @@ If you are interested in the methods and the details of our analysis and its imp
 
 ![Rating Distribution]({base}/plots/badmovie.png)
 
+The plot shown above visualizes the level of the predictors effects on bad movies through a logistic regression. Predictors with a positive coefficient (on the right side) are predictors on bad movies and predictors with a negative coefficient (on the left side) on good movies.
+
 
 
 <!-- ```
