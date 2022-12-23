@@ -6,6 +6,8 @@ import { base } from "$app/paths";
 
 ## Budget
 
+![Budget Boxplot]({base}/plots/budget_histplot.png)
+
 Lorem Ipsum.
 
 </section>
