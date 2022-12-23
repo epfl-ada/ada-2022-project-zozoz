@@ -1,5 +1,6 @@
 # What makes a bad movie bad? *A data-driven analysis of Sharknado and co.*
 
+Find the amaizing data story [here](https://epfl-ada.github.io/ada-2022-project-zozoz).
 
 ## Abstract 📝
 The CMU movie [dataset](http://www.cs.cmu.edu/~ark/personas/) comes from around 80k freebase movie entries and 42,306 movie plot summaries extracted from Wikipedia. The main question that will drive our analysis is what makes a bad movie bad. Success has different dimensions and we are using the box office and IMDb ratings to cover two important ones. The analysis will be performed while taking into account different attributes such as genres, actors, directors, characters, budget and so on. By using regular statistical methods and ML tools, the goal is to provide a robust analysis and come with a framework that allow us to draw meaningful conclusions. We want to see if we can find factors for the next bad movie.
