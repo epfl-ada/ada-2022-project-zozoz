@@ -20,6 +20,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>What makes a bad movie bad? - ZOZOZO</title>
+</svelte:head>
+
 <svelte:window bind:scrollY={y} />
 {#if y > 100}
     <ul class="list-reset nav ml4">
