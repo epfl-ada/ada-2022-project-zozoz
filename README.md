@@ -13,8 +13,8 @@ We splited our work in several folders for clarity.
 - The `/src` folder contains all the code produced for our analysis. First, it contains a [notebook](/src/create_data.ipynb) that is used to generate our data in correct format (see below for more extensive explanations), [another one](/src/data_formatting.ipynb) for the final data pre-processing steps such as data integration, and features parsing and filtering, and the [last one](src/final_plot.ipynb) includes our main figures used for the presentation. Then, the folder is divided into several subfolders:
     - The `/src/utils` folder contains the code with the helpers functions and notebook for data creation. 
     - The `/src/eda` folder is dedicated to the data exploration for milestone 2. The first [notebook](/src/eda/data_inspection.ipynb) is handling the general data description and analysis. Whereas the second [notebook](/src/eda/initial_time_series_analysis.ipynb) focuses on analysis to support our research questions. 
-    - The `/src/features_engineering` folder hold our handcrafted features extracted from our datasets.
-    - Finally, the `/src/observational_studies` folder contains the observational studies such as propensity matching and regression to try to draw causal conclusions on the impact of our features on movie ratings. 
+    - The `/src/features_engineering` folder hold our handcrafted features extracted from our datasets, followed by deep analysis across each feature to investiguate its relationship with movie ratings.
+    - Finally, the `/src/observational_studies` folder contains the observational studies such as propensity matching and regression to try to draw causal conclusions on the impact of our previous features on movie ratings. 
 - The `/docs` folder contains the code to build the website for our [data story](https://epfl-ada.github.io/ada-2022-project-zozoz).
  
 ---
@@ -75,11 +75,13 @@ As previously stated, we used Wikipedia data to recover the release date for 5k 
 Revenue could be retrieve from Wikipedia, but the parsing is hard and the pipeline cannot guarantee 100% hit due to wrong wikipedia mapping and inconsistent page structure. One of the interest of the revenue would be to use it as a proxy of the movie success but we will use instead the ratings from IMDb users. The study of revenue over time could be interesting but would require comparison dataset to be sure that the findings are note simply due to inflation. Thus we would need extensive data on other industries.
 IMDb can be used to retrieve missing actors/actresses data.
 #### Incorrect data
-As seen in the initial data exploration, we can see that we have some entries with abnormal values, redundancy (e.g. ukrainian, ukranian) and other artifacts in the data. We already began to correct these problems by using for example mappings to converge to common values to avoid redundancy. Clustering could also help to gather data whose differences are likely due to generation/human errors. We plan to do an extensive cleaning and correction of the data only for movies for which we have an IMDb ids. The use of advanced value imputation using similarity between movies is also considered.
+As seen in the initial data exploration, we can see that we have some entries with abnormal values, redundancy (e.g. ukrainian, ukranian) and other artifacts in the data. We already began to correct these problems by using for example mappings to converge to common values to avoid redundancy. Clustering could also help to gather data whose differences are likely due to generation/human errors. The use of advanced value imputation using similarity between movies is also considered.
+#### Features clustering
+Then, we make extensive cleaning and correction of the data only for movies for which we have an IMDb ids. Our data can be very high dimensional if we consider the total number of languages, countries, actors etc. We have only 44k movies, but we have several hundreds on genres, languages and countries, which gives already around 10 millions possibilities. And this is without even looking at the hundreds of thousands of actors and characters. Thus we have to come up with features that can capture signal in the data, without having to do one-hot encoding for each feature. For this prupose, we cluster countries, genres and languages into main general groups.
 
 ### 3. Data Analysis 📈 
 
-Our main focus of interest is the study of the reasons behind a movie success and their evolution over time. To perfom these analyses we plan to use several tools among which we can find time series analysis, clustering methods and the observational study machinery.
+Our main focus of interest is the study of the reasons behind a bad movie. To perfom these analysis we use several tools among which we can find time series analysis, clustering methods and the observational study machinery.
 Time series analysis implies several mathematical methods ranging from statistical tests to regression and ARMA/ARIMA.
 For movie clustering we plan to use standard unsupervised methods such as K-means or BIRCH.
 Finally, to assess the values of our results in the scope of statistical findings, we plan to use the different tools that are involved in observationnal studies such as matching algorithm or logistic regression.
