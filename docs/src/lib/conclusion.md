@@ -11,13 +11,13 @@ To sum up, the search for causation behind the non-success of a movie seems like
 
 Furthermore, the different models' overall $$r^2$$ of 0.163 and other fit metrics are low. Thus our set of features cannot explain a large part of the variance in the data. It was expected based on the small subset of metadata we had. A movie cannot be reduced to the length of its title or the number of actors and actresses who play in it. It is time for us to put on our astronaut suits again, the exploration of the bad movie world awaits.
 
-## Side nerdy note
+## Nerdy side note
 
 If you are interested in the methods and the details of our analysis and its implementation, we encourage you to look at our <a href="https://github.com/epfl-ada/ada-2022-project-zozoz">GitHub</a>. But for the most hurried of you, the observational study pipeline was done using propensity score computation with logistic regression and matching with KNN. Then to assess if the treatment was significant to decide if a movie was good or bad, we used our old friend: logistic regression!
 
 ![Rating Distribution]({base}/plots/badmovie.png)
 
-The plot shown above visualizes the level of the predictors effects on bad movies through a logistic regression. Predictors with a positive coefficient (on the right side) are predictors on bad movies and predictors with a negative coefficient (on the left side) on good movies.
+Predictors with a positive coefficient (on the right side) are predictors for good ratings and predictors with a negative coefficient (on the left side) for bad ratings.
 
 And for our readers that could feel frustrated of talking only about bad movies, here are some coefficients of the initial regression on the movie rating 😉.
 
