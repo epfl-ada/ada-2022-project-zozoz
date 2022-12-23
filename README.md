@@ -77,6 +77,9 @@ IMDb can be used to retrieve missing actors/actresses data.
 #### Incorrect data
 As seen in the initial data exploration, we can see that we have some entries with abnormal values, redundancy (e.g. ukrainian, ukranian) and other artifacts in the data. We already began to correct these problems by using for example mappings to converge to common values to avoid redundancy. Clustering could also help to gather data whose differences are likely due to generation/human errors. We plan to do an extensive cleaning and correction of the data only for movies for which we have an IMDb ids. The use of advanced value imputation using similarity between movies is also considered.
 
+#### Features clustering
+Our data can be very high dimensional if we consider the total number of languages, countries, actors etc. We have only 44k movies, but we have several hundreds on genres, languages and countries, which gives already around 10 millions possibilities. And this is without even looking at the hundreds of thousands of actors and characters. Thus we have to come up with features that can capture signal in the data, without having to do one-hot encoding for each feature. For this prupose, we cluster countries, genres and languages into main general groups.
+
 ### 3. Data Analysis 📈 
 
 Our main focus of interest is the study of the reasons behind a movie success and their evolution over time. To perfom these analyses we plan to use several tools among which we can find time series analysis, clustering methods and the observational study machinery.
